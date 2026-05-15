@@ -100,6 +100,12 @@ export default function AdminRounds() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Link
+                    to={`/admin/rounds/${r.id}`}
+                    className="rounded-md bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white hover:bg-slate-800"
+                  >
+                    운영
+                  </Link>
+                  <Link
                     to={`/admin/rounds/${r.id}/teams`}
                     className="rounded-md border border-slate-300 px-3 py-1.5 text-xs hover:bg-slate-100"
                   >

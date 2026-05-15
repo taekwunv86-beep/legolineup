@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import AdminLogin from "./pages/admin/Login.js";
 import AdminLayout from "./components/AdminLayout.js";
 import AdminRounds from "./pages/admin/Rounds.js";
+import AdminLive from "./pages/admin/Live.js";
 import AdminTeams from "./pages/admin/Teams.js";
 import AdminUsers from "./pages/admin/Users.js";
 import { RequireRole } from "./components/RequireRole.js";
@@ -22,6 +23,7 @@ export default function App() {
       >
         <Route index element={<Navigate to="/admin/rounds" replace />} />
         <Route path="rounds" element={<AdminRounds />} />
+        <Route path="rounds/:roundId" element={<AdminLive />} />
         <Route path="rounds/:roundId/teams" element={<AdminTeams />} />
         <Route path="users" element={<AdminUsers />} />
       </Route>
