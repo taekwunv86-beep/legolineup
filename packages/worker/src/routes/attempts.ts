@@ -11,6 +11,7 @@ import { getDb } from "../db/client.js";
 import { attempts, teams } from "../db/schema.js";
 import { apiError } from "../middleware/error.js";
 import { requireAuth } from "../middleware/auth.js";
+import { requireRole } from "../middleware/role.js";
 import { ensureRoundFresh } from "../lib/lazy-end.js";
 import type { AppBindings } from "../env.js";
 
@@ -147,6 +148,57 @@ attemptRoutes.put("/by-uuid/:uuid", async (c) => {
     .update(attempts)
     .set(patch)
     .where(eq(attempts.client_uuid, uuid))
+    .returning()
+    .get();
+  return c.json<Attempt>(toAttempt(updated));
+});
+
+// POST /api/attempts/:id/success — FT/관리자 성공 처리 (멱등)
+attemptRoutes.post("/:id/success", requireRole("admin", "ft"), async (c) => {
+  const id = Number(c.req.param("id"));
+  if (!Number.isFinite(id)) {
+    return apiError(c, ErrorCode.ValidationFailed, "잘못된 시도 ID 입니다.");
+  }
+  const auth = c.get("auth")!;
+  const db = getDb(c.env);
+  const existing = await db.select().from(attempts).where(eq(attempts.id, id)).get();
+  if (!existing) return apiError(c, ErrorCode.NotFound, "시도를 찾을 수 없습니다.");
+
+  if (existing.is_success === 1) {
+    return c.json<Attempt>(toAttempt(existing)); // 멱등
+  }
+
+  const updated = await db
+    .update(attempts)
+    .set({
+      is_success: 1,
+      success_marked_by: auth.user_id,
+      success_marked_at_ms: Date.now(),
+    })
+    .where(eq(attempts.id, id))
+    .returning()
+    .get();
+  return c.json<Attempt>(toAttempt(updated));
+});
+
+// DELETE /api/attempts/:id/success — 관리자만 성공 취소
+attemptRoutes.delete("/:id/success", requireRole("admin"), async (c) => {
+  const id = Number(c.req.param("id"));
+  if (!Number.isFinite(id)) {
+    return apiError(c, ErrorCode.ValidationFailed, "잘못된 시도 ID 입니다.");
+  }
+  const db = getDb(c.env);
+  const existing = await db.select().from(attempts).where(eq(attempts.id, id)).get();
+  if (!existing) return apiError(c, ErrorCode.NotFound, "시도를 찾을 수 없습니다.");
+
+  const updated = await db
+    .update(attempts)
+    .set({
+      is_success: 0,
+      success_marked_by: null,
+      success_marked_at_ms: null,
+    })
+    .where(eq(attempts.id, id))
     .returning()
     .get();
   return c.json<Attempt>(toAttempt(updated));

@@ -7,6 +7,9 @@ import AdminTeams from "./pages/admin/Teams.js";
 import AdminUsers from "./pages/admin/Users.js";
 import TeamLogin from "./pages/team/Login.js";
 import TeamSession from "./pages/team/Session.js";
+import FtLogin from "./pages/ft/Login.js";
+import FtLayout from "./components/FtLayout.js";
+import FtRoundsList from "./pages/ft/Rounds.js";
 import { RequireRole } from "./components/RequireRole.js";
 
 export default function App() {
@@ -41,7 +44,20 @@ export default function App() {
         }
       />
 
-      {/* 추후 추가될 라우트 (FT-*, LB-02, ADM-06/07) */}
+      <Route path="/ft/login" element={<FtLogin />} />
+      <Route
+        path="/ft"
+        element={
+          <RequireRole role="ft">
+            <FtLayout />
+          </RequireRole>
+        }
+      >
+        <Route index element={<Navigate to="/ft/rounds" replace />} />
+        <Route path="rounds" element={<FtRoundsList />} />
+      </Route>
+
+      {/* 추후 추가될 라우트 (LB-02, ADM-06/07) */}
 
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -7,6 +7,7 @@ import { roundTeamRoutes, teamRoutes } from "./routes/teams.js";
 import { userRoutes } from "./routes/users.js";
 import { liveRoutes, teamHeartbeatRoutes } from "./routes/live.js";
 import { attemptRoutes } from "./routes/attempts.js";
+import { teamNoteRoutes, noteRoutes } from "./routes/notes.js";
 import type { AppBindings } from "./env.js";
 
 const app = new Hono<AppBindings>();
@@ -25,6 +26,8 @@ app.route("/api/rounds", liveRoutes);
 app.route("/api/rounds/:round_id/teams", roundTeamRoutes);
 app.route("/api/teams", teamRoutes);
 app.route("/api/teams", teamHeartbeatRoutes);
+app.route("/api/teams", teamNoteRoutes);
+app.route("/api/notes", noteRoutes);
 app.route("/api/attempts", attemptRoutes);
 
 app.notFound((c) => c.json({ error: { code: "NOT_FOUND", message: "요청한 리소스가 없습니다." } }, 404));
