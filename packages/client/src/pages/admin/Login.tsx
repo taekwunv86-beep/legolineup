@@ -40,7 +40,7 @@ export default function AdminLogin() {
         onSubmit={onSubmit}
         className="w-full max-w-sm rounded-2xl bg-white p-8 shadow-md"
       >
-        <h1 className="mb-1 text-2xl font-bold">DESCO 운영 관리자</h1>
+        <h1 className="mb-1 text-2xl font-bold">Legolineup 운영 관리자</h1>
         <p className="mb-6 text-sm text-slate-500">관리자 계정으로 로그인하세요.</p>
 
         <label className="mb-3 block">

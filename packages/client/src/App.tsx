@@ -5,6 +5,8 @@ import AdminRounds from "./pages/admin/Rounds.js";
 import AdminLive from "./pages/admin/Live.js";
 import AdminTeams from "./pages/admin/Teams.js";
 import AdminUsers from "./pages/admin/Users.js";
+import TeamLogin from "./pages/team/Login.js";
+import TeamSession from "./pages/team/Session.js";
 import { RequireRole } from "./components/RequireRole.js";
 
 export default function App() {
@@ -28,7 +30,18 @@ export default function App() {
         <Route path="users" element={<AdminUsers />} />
       </Route>
 
-      {/* 추후 추가될 라우트 (TM-*, FT-*, LB-02, ADM-03/06/07) */}
+      <Route path="/team/login" element={<TeamLogin />} />
+      <Route path="/team/login/:roundId" element={<TeamLogin />} />
+      <Route
+        path="/team"
+        element={
+          <RequireRole role="team">
+            <TeamSession />
+          </RequireRole>
+        }
+      />
+
+      {/* 추후 추가될 라우트 (FT-*, LB-02, ADM-06/07) */}
 
       <Route path="*" element={<NotFound />} />
     </Routes>

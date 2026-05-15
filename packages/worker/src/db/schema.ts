@@ -25,6 +25,8 @@ export const rounds = sqliteTable(
       .notNull()
       .default("preparing"),
     share_token: text("share_token").notNull().unique(),
+    // 팀 로그인용 6자리 코드 (저장은 대시 없이, 표시는 3-3 형식)
+    access_code: text("access_code"),
     started_at_ms: integer("started_at_ms"),
     ended_at_ms: integer("ended_at_ms"),
     created_by: integer("created_by")
@@ -36,6 +38,7 @@ export const rounds = sqliteTable(
   },
   (t) => ({
     statusIdx: index("idx_rounds_status").on(t.status),
+    accessCodeIdx: uniqueIndex("uq_rounds_access_code").on(t.access_code),
   }),
 );
 

@@ -19,7 +19,7 @@ export default function AdminLayout() {
     <div className="flex min-h-screen bg-slate-100">
       <aside className="w-56 shrink-0 border-r border-slate-200 bg-white">
         <div className="border-b border-slate-200 px-5 py-5">
-          <p className="text-xs uppercase tracking-wider text-slate-400">DESCO</p>
+          <p className="text-xs uppercase tracking-wider text-slate-400">Legolineup</p>
           <p className="text-base font-bold text-slate-900">운영 관리자</p>
         </div>
         <nav className="flex flex-col gap-1 px-3 py-3">

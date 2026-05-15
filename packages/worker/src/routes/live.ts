@@ -191,6 +191,7 @@ liveRoutes.get("/:id/live", requireRole("admin", "ft"), async (c) => {
       id: r.id,
       name: r.name,
       status: r.status,
+      access_code: r.access_code,
       started_at_ms: r.started_at_ms,
       time_limit_seconds: r.time_limit_seconds,
       time_remaining_ms: timeRemainingMs,
@@ -232,6 +233,8 @@ teamHeartbeatRoutes.post("/:id/heartbeat", async (c) => {
       : null;
   return c.json<HeartbeatResponse>({
     round_status: fresh.status,
+    started_at_ms: fresh.started_at_ms,
+    time_limit_seconds: fresh.time_limit_seconds,
     time_remaining_ms: timeRemainingMs,
   });
 });

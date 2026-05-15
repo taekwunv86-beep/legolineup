@@ -4,9 +4,29 @@ import { COLOR_CODES } from "./constants.js";
 export const loginBodySchema = z.object({
   username: z.string().min(1).max(64),
   password: z.string().min(1).max(128),
-  round_id: z.number().int().positive().optional(),
 });
 export type LoginBody = z.infer<typeof loginBodySchema>;
+
+// 팀 로그인: 1단계 — 차수 코드로 차수 + 팀 목록 조회
+export const teamByCodeBodySchema = z.object({
+  code: z
+    .string()
+    .min(6)
+    .max(8)
+    .transform((s) => s.replace(/[^A-Z0-9]/gi, "").toUpperCase()),
+});
+export type TeamByCodeBody = z.infer<typeof teamByCodeBodySchema>;
+
+// 팀 로그인: 2단계 — 코드 + team_id 로 JWT 발급
+export const teamLoginBodySchema = z.object({
+  code: z
+    .string()
+    .min(6)
+    .max(8)
+    .transform((s) => s.replace(/[^A-Z0-9]/gi, "").toUpperCase()),
+  team_id: z.number().int().positive(),
+});
+export type TeamLoginBody = z.infer<typeof teamLoginBodySchema>;
 
 export const createUserBodySchema = z.object({
   username: z.string().min(1).max(64),
@@ -37,8 +57,7 @@ export type UpdateRoundBody = z.infer<typeof updateRoundBodySchema>;
 
 export const createTeamBodySchema = z.object({
   name: z.string().min(1).max(64),
-  username: z.string().min(1).max(64),
-  password: z.string().min(1).max(128),
+  username: z.string().min(1).max(64).optional(),
 });
 export type CreateTeamBody = z.infer<typeof createTeamBodySchema>;
 
@@ -46,13 +65,11 @@ export const bulkCreateTeamsBodySchema = z.object({
   count: z.number().int().min(1).max(50),
   name_prefix: z.string().max(32).optional(),
   username_prefix: z.string().max(32).optional(),
-  password_pattern: z.enum(["random4", "random6"]).optional(),
 });
 export type BulkCreateTeamsBody = z.infer<typeof bulkCreateTeamsBodySchema>;
 
 export const updateTeamBodySchema = z.object({
   name: z.string().min(1).max(64).optional(),
-  password: z.string().min(1).max(128).optional(),
 });
 export type UpdateTeamBody = z.infer<typeof updateTeamBodySchema>;
 

@@ -105,33 +105,65 @@ function LiveHeader({
   countdownMs: number | null;
 }) {
   return (
-    <div className="mb-4 flex items-end justify-between rounded-2xl border border-slate-200 bg-white p-6">
-      <div>
-        <div className="mb-2 flex items-center gap-2">
-          <span
-            className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
-              ROUND_STATUS_BADGE_CLASS[round.status]
+    <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-6">
+      <div className="flex items-end justify-between">
+        <div>
+          <div className="mb-2 flex items-center gap-2">
+            <span
+              className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                ROUND_STATUS_BADGE_CLASS[round.status]
+              }`}
+            >
+              {ROUND_STATUS_LABEL[round.status]}
+            </span>
+            <h1 className="text-2xl font-bold">{round.name}</h1>
+          </div>
+          <p className="text-xs text-slate-500">
+            제한 {Math.floor(round.time_limit_seconds / 60)}분
+            {round.started_at_ms != null && ` · 시작 ${formatKst(round.started_at_ms)}`}
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-xs uppercase tracking-wider text-slate-400">남은 시간</p>
+          <p
+            className={`font-mono text-5xl font-bold tabular-nums ${
+              countdownMs != null && countdownMs < 60_000 ? "text-red-600" : "text-slate-900"
             }`}
           >
-            {ROUND_STATUS_LABEL[round.status]}
-          </span>
-          <h1 className="text-2xl font-bold">{round.name}</h1>
+            {countdownMs != null ? formatDurationMs(countdownMs) : "--:--.--"}
+          </p>
         </div>
-        <p className="text-xs text-slate-500">
-          제한 {Math.floor(round.time_limit_seconds / 60)}분
-          {round.started_at_ms != null && ` · 시작 ${formatKst(round.started_at_ms)}`}
-        </p>
       </div>
-      <div className="text-right">
-        <p className="text-xs uppercase tracking-wider text-slate-400">남은 시간</p>
-        <p
-          className={`font-mono text-5xl font-bold tabular-nums ${
-            countdownMs != null && countdownMs < 60_000 ? "text-red-600" : "text-slate-900"
-          }`}
-        >
-          {countdownMs != null ? formatDurationMs(countdownMs) : "--:--.--"}
-        </p>
+      {round.access_code && <AccessCodeBanner accessCode={round.access_code} />}
+    </div>
+  );
+}
+
+function AccessCodeBanner({ accessCode }: { accessCode: string }) {
+  const display = `${accessCode.slice(0, 3)}-${accessCode.slice(3)}`;
+  const loginUrl = `${window.location.origin}/team/login?code=${accessCode}`;
+  const copy = (text: string) => {
+    navigator.clipboard.writeText(text);
+  };
+  return (
+    <div className="mt-5 flex flex-wrap items-center gap-4 rounded-xl bg-slate-900 px-5 py-4 text-white">
+      <div>
+        <p className="text-[10px] uppercase tracking-wider text-slate-400">팀 입장 코드</p>
+        <p className="font-mono text-3xl font-bold tracking-widest">{display}</p>
       </div>
+      <div className="flex-1" />
+      <button
+        onClick={() => copy(display)}
+        className="rounded-lg border border-slate-600 px-3 py-2 text-xs hover:bg-slate-800"
+      >
+        코드 복사
+      </button>
+      <button
+        onClick={() => copy(loginUrl)}
+        className="rounded-lg border border-slate-600 px-3 py-2 text-xs hover:bg-slate-800"
+      >
+        링크 복사
+      </button>
     </div>
   );
 }

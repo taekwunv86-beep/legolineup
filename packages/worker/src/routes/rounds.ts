@@ -14,6 +14,7 @@ import { apiError } from "../middleware/error.js";
 import { requireAuth } from "../middleware/auth.js";
 import { requireRole } from "../middleware/role.js";
 import { generateShareToken } from "../lib/share-token.js";
+import { generateUniqueAccessCode } from "../lib/access-code.js";
 import { ensureRoundFresh } from "../lib/lazy-end.js";
 import type { AppBindings } from "../env.js";
 
@@ -27,6 +28,7 @@ const toRound = (r: typeof rounds.$inferSelect): Round => ({
   time_limit_seconds: r.time_limit_seconds,
   status: r.status,
   share_token: r.share_token,
+  access_code: r.access_code,
   started_at_ms: r.started_at_ms,
   ended_at_ms: r.ended_at_ms,
   created_by: r.created_by,
@@ -62,6 +64,7 @@ roundRoutes.post("/", requireRole("admin"), async (c) => {
       name: parsed.data.name,
       time_limit_seconds: parsed.data.time_limit_seconds ?? 900,
       share_token: generateShareToken(),
+      access_code: await generateUniqueAccessCode(db),
       created_by: auth.user_id,
     })
     .returning()

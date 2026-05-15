@@ -27,10 +27,21 @@ export type Round = {
   time_limit_seconds: number;
   status: RoundStatus;
   share_token: string;
+  access_code: string | null;
   started_at_ms: number | null;
   ended_at_ms: number | null;
   created_by: number;
   created_at: number;
+};
+
+export type TeamByCodeResponse = {
+  round: {
+    id: number;
+    name: string;
+    status: RoundStatus;
+    access_code: string;
+  };
+  teams: { id: number; name: string }[];
 };
 
 export type RoundSummary = Round & {
@@ -91,6 +102,8 @@ export type StartRoundResponse = {
 
 export type HeartbeatResponse = {
   round_status: RoundStatus;
+  started_at_ms: number | null;
+  time_limit_seconds: number;
   time_remaining_ms: number | null;
 };
 
@@ -110,6 +123,7 @@ export type LiveResponse = {
     id: number;
     name: string;
     status: RoundStatus;
+    access_code: string | null;
     started_at_ms: number | null;
     time_limit_seconds: number;
     time_remaining_ms: number | null;
