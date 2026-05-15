@@ -1,0 +1,24 @@
+{
+  "name": "desco-edu",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.1.2",
+  "scripts": {
+    "dev": "pnpm -r --parallel --stream run dev",
+    "build": "pnpm -r run build",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "pnpm -r run lint",
+    "shared:build": "pnpm --filter @desco/shared run build",
+    "client:dev": "pnpm --filter @desco/client run dev",
+    "worker:dev": "pnpm --filter @desco/worker run dev",
+    "db:generate": "pnpm --filter @desco/worker run db:generate",
+    "db:apply:local": "pnpm --filter @desco/worker run db:apply:local",
+    "db:apply:remote": "pnpm --filter @desco/worker run db:apply:remote"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

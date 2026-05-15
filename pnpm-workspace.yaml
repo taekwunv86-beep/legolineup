@@ -1,0 +1,8 @@
+packages:
+  - "packages/*"
+
+# 네이티브 바이너리 다운로드/빌드를 허용해야 정상 동작하는 패키지들
+allowBuilds:
+  esbuild: true
+  sharp: true
+  workerd: true

@@ -1,0 +1,30 @@
+{
+  "name": "@desco/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:apply:local": "wrangler d1 migrations apply desco-edu --local",
+    "db:apply:remote": "wrangler d1 migrations apply desco-edu --remote",
+    "db:seed:gen": "node scripts/generate-seed.mjs",
+    "db:seed:local": "node scripts/generate-seed.mjs && wrangler d1 execute desco-edu --local --file=./.seed.generated.sql",
+    "db:seed:remote": "node scripts/generate-seed.mjs && wrangler d1 execute desco-edu --remote --file=./.seed.generated.sql"
+  },
+  "dependencies": {
+    "@desco/shared": "workspace:*",
+    "drizzle-orm": "^0.36.4",
+    "hono": "^4.6.14",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "drizzle-kit": "^0.30.1",
+    "typescript": "^5.6.3",
+    "wrangler": "^3.99.0"
+  }
+}
