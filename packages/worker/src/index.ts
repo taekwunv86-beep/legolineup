@@ -2,6 +2,9 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { wrapErrors } from "./middleware/error.js";
 import { authRoutes } from "./routes/auth.js";
+import { roundRoutes } from "./routes/rounds.js";
+import { roundTeamRoutes, teamRoutes } from "./routes/teams.js";
+import { userRoutes } from "./routes/users.js";
 import type { AppBindings } from "./env.js";
 
 const app = new Hono<AppBindings>();
@@ -13,6 +16,10 @@ app.use("*", wrapErrors);
 app.get("/api/health", (c) => c.json({ ok: true, ts: Date.now() }));
 
 app.route("/api/auth", authRoutes);
+app.route("/api/users", userRoutes);
+app.route("/api/rounds", roundRoutes);
+app.route("/api/rounds/:round_id/teams", roundTeamRoutes);
+app.route("/api/teams", teamRoutes);
 
 app.notFound((c) => c.json({ error: { code: "NOT_FOUND", message: "요청한 리소스가 없습니다." } }, 404));
 

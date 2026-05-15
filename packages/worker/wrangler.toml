@@ -7,9 +7,11 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 ENVIRONMENT = "development"
 
-# D1 binding — DB ID는 `wrangler d1 create desco-edu` 후 채워 넣을 것
+# D1 binding
+# - 로컬(--local)에서는 database_id 값을 사용하지 않고 database_name 기준으로 .wrangler/state/d1/ 에 SQLite 파일 생성
+# - 원격 배포 시 `wrangler d1 create desco-edu` 결과의 실제 ID로 아래 값을 교체할 것
 [[d1_databases]]
 binding = "DB"
 database_name = "desco-edu"
-database_id = "REPLACE_WITH_D1_DATABASE_ID"
+database_id = "00000000-0000-0000-0000-000000000000"
 migrations_dir = "migrations"
